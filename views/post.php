@@ -9,6 +9,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
 
+    <!-- Custom style -->
+    <link rel="stylesheet" type="text/css" href="../assets/css/styles.css" />
 
     <title>CFPT Facebook</title>
 </head>
@@ -44,6 +46,27 @@
 
 
     <!-- Main -->
+
+    <!-- Banner -->
+    <div class="w-100 h-40 bg-primary d-flex flex-column justify-content-center align-items-center">
+        <h1 class="display-1 pb-5">Create Your Own Post !</h1>
+        <h1 class="display-6"></h1>
+    </div>
+
+    <!-- Form -->
+    <div class="d-flex flex-column justify-content-center align-items-center">
+        <form class="w-25 mt-5">
+            <div class="form-group mb-2">
+                <label class="mb-1" for="postFormUpload">Choose your Uploads : </label>
+                <input type="file" class="form-control" id="postFormUpload" accept="image/*" multiple>
+            </div>
+            <div class="form-group mb-2">
+                <label class="mb-1" for="postFormDescription">Description : </label>
+                <textarea class="form-control" id="postFormDescription" rows="5"></textarea>
+            </div>
+        </form>
+    </div>
+
 
 
 </body>

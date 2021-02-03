@@ -1,0 +1,23 @@
+/* --- CUSTOM STYLE --- */
+
+/* --- WIDTH --- */
+.w-33 {
+    width: 33%;
+}
+.w-40 {
+    width: 40%;
+}
+.w-66 {
+    width: 66%;
+}
+
+/* --- HEIGHT --- */
+.h-33 {
+    height: 33%;
+}
+.h-40 {
+    height: 40%;
+}
+.h-66 {
+    height: 66%;
+}
