@@ -1,13 +1,15 @@
 <?php
 
-require_once('../models/posts.php');
-require_once('../models/medias.php');
+require_once('../models/OBJposts.php');
+require_once('../models/OBJmedias.php');
 
 
 // --- CONST ---
 
 $MAX_SIZE_FILE = 3000000;
 $MAX_SIZE_POST = 70000000;
+
+$REP_IMG = "../assets/img/";
 
 
 // ---GET DATA ---
@@ -30,29 +32,45 @@ foreach ($files as $f) {
     $post_size += $f['size'];
 
     if ($f['size'] >= $MAX_SIZE_FILE) {
-        $error = "One of your images exceeds the size limit of" . $MAX_SIZE_FILE;
+        $error = "One of your images exceeds the size limit of " . $MAX_SIZE_FILE . " bytes.";
     }
 }
 
 if ($post_size >= $MAX_SIZE_POST) {
-    $error = "Your images exceeds the size limit of " . $MAX_SIZE_POST;
+    $error = "Your images exceeds the size limit of " . $MAX_SIZE_POST . " bytes.";
 }
 
-
+// return to post with the error
 if ($error != null) {
+    header("location: ../views/post.php?error=" . $error);
+    exit;
 }
 
 
-//TODO : Manage error and create post and media
-//TODO : download Media in /img/
+// --- CREATE POST & IMG ---
+
+$postInserted = json_encode(Posts::insertPost($commentaire));
+
+if ($postInserted) {
+    $idPost = Posts::getLastInsertId()[0][0];
+
+    foreach ($files as $key => $value) {
+        $mediaInserted = Medias::insertMedia($value["name"], $value["type"], $idPost);
+
+        if ($mediaInserted) {
+            $fileExtention = '.' . explode('/', $value["type"])[1];
+            $filename = $REP_IMG . uniqid("", true) . $fileExtention;
+
+            move_uploaded_file($value["tmp_name"], $filename);
+        }
+    }
+}
 
 
-//$postInserted = json_encode(Posts::insertPost($commentaire));
+// ------- Return to Home -------
 
-
-
-
-
+header("location: ../views/home.php");
+exit;
 
 
 

@@ -1,7 +1,7 @@
 <?php
 
 // DB CONN
-require_once('../models/dbConn.php');
+require_once('../models/OBJdbConn.php');
 
 class Medias
 {
@@ -21,7 +21,7 @@ class Medias
     {
         $creationDate = date("Y-m-d H:i:s");
 
-        $sql = "INSERT INTO media (nom, type, creationDate, modificationDate, idPost) VALUES (?,?,?)";
+        $sql = "INSERT INTO media (nom, type, creationDate, modificationDate, idPost) VALUES (?,?,?,?,?)";
         return DBConnection::prepare($sql)->execute([$nom, $type, $creationDate, $creationDate, $idPost]);
     }
 

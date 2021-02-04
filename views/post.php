@@ -1,3 +1,13 @@
+<?php
+
+$error = filter_input(INPUT_GET, "error", FILTER_DEFAULT, FILTER_SANITIZE_STRING);
+$errorAlert;
+
+if (isset($error)) {
+    $errorAlert = '<div class="alert alert-danger fade show mb-0" role="alert">' . $error . '</div>';
+}
+
+?>
 <!DOCTYPE html>
 <html lang="fr" style="height: 100%;">
 
@@ -48,6 +58,9 @@
 
 
     <!-- Main -->
+
+    <!-- Potentiel Error -->
+    <?= (isset($errorAlert)) ? $errorAlert : null; ?>
 
     <!-- Banner -->
     <div class="w-100 h-40 bg-primary d-flex flex-column justify-content-center align-items-center">

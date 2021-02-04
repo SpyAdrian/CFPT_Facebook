@@ -1,7 +1,7 @@
 <?php
 
 // DB CONN
-require_once('../models/dbConn.php');
+require_once('../models/OBJdbConn.php');
 
 class Posts
 {
@@ -9,6 +9,18 @@ class Posts
     {
         try {
             $sql = "SELECT * FROM post";
+            $db = DBConnection::prepare($sql);
+            $db->execute();
+            return $db->fetchAll();
+        } catch (PDOException $e) {
+            return '<pre>Erreur : ' . $e->getMessage() . '</pre>';
+        }
+    }
+
+    public static function getLastInsertId()
+    {
+        try {
+            $sql = "SELECT LAST_INSERT_ID();";
             $db = DBConnection::prepare($sql);
             $db->execute();
             return $db->fetchAll();
