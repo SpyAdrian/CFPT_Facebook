@@ -17,6 +17,20 @@ class Posts
         }
     }
 
+    public static function getPostsWithMediaNameByNewest()
+    {
+        try {
+            $sql = "SELECT post.idPost, post.commentaire, post.creationDate, post.modificationDate, media.nom FROM post ";
+            $sql .= "INNER JOIN media on post.idPost = media.idPost ";
+            $sql .= "ORDER BY post.modificationDate DESC, post.idPost ASC";
+            $db = DBConnection::prepare($sql);
+            $db->execute();
+            return $db->fetchAll();
+        } catch (PDOException $e) {
+            return '<pre>Erreur : ' . $e->getMessage() . '</pre>';
+        }
+    }
+
     public static function getLastInsertId()
     {
         try {

@@ -62,12 +62,12 @@ if ($postInserted) {
 
     foreach ($files as $key => $value) {
         $fileExtention = '.' . explode('/', $value["type"])[1];
-        $filename = $REP_IMG . uniqid("", true) . $fileExtention;
+        $filename = uniqid("", true) . $fileExtention;
 
         $mediaInserted = Medias::insertMedia($filename, $value["type"], $idPost);
 
         if ($mediaInserted) {
-            move_uploaded_file($value["tmp_name"], $filename);
+            move_uploaded_file($value["tmp_name"], $REP_IMG . $filename);
         }
     }
 }

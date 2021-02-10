@@ -56,7 +56,9 @@
     </div>
 
     <!-- Cards -->
-
+    <div class="mt-5 d-flex flex-column justify-content-center align-items-center">
+        <?php require_once('../controllers/getPosts_controller.php') ?>
+    </div>
 
 </body>
 
