@@ -17,7 +17,7 @@ $REP_IMG = "../assets/img/";
 $commentaire = filter_input(INPUT_POST, "createPostForm_Commentaire", FILTER_DEFAULT, FILTER_SANITIZE_STRING);
 $files = null;
 
-if ($_FILES['createPostForm_File']) {
+if (isset($_FILES['createPostForm_File'])) {
     $files = reArrayFiles($_FILES['createPostForm_File']);
 }
 
@@ -31,8 +31,14 @@ foreach ($files as $f) {
 
     $post_size += $f['size'];
 
+    if (strpos($f["type"], "image") === false) {
+        $error = "One of your files isn't an image." . $f["type"];
+        break;
+    }
+
     if ($f['size'] >= $MAX_SIZE_FILE) {
         $error = "One of your images exceeds the size limit of " . $MAX_SIZE_FILE . " bytes.";
+        break;
     }
 }
 
@@ -55,12 +61,12 @@ if ($postInserted) {
     $idPost = Posts::getLastInsertId()[0][0];
 
     foreach ($files as $key => $value) {
-        $mediaInserted = Medias::insertMedia($value["name"], $value["type"], $idPost);
+        $fileExtention = '.' . explode('/', $value["type"])[1];
+        $filename = $REP_IMG . uniqid("", true) . $fileExtention;
+
+        $mediaInserted = Medias::insertMedia($filename, $value["type"], $idPost);
 
         if ($mediaInserted) {
-            $fileExtention = '.' . explode('/', $value["type"])[1];
-            $filename = $REP_IMG . uniqid("", true) . $fileExtention;
-
             move_uploaded_file($value["tmp_name"], $filename);
         }
     }
