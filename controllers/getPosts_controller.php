@@ -14,6 +14,8 @@ $REP_IMG = "../assets/img/";
 $result = "";
 $posts = Posts::getPostsWithMediaNameByNewest();
 
+if ($posts == array()) die();
+
 
 // --- CONVERT TO HTML CARD ---
 
@@ -29,6 +31,7 @@ foreach ($posts as $key => $post) {
 
     $idPost = $post['idPost'];
     $src = $REP_IMG . $post['nom'];
+    $type = $post['type'];
     $commentaire = $post['commentaire'];
     $modificationDate = $post['modificationDate'];
 
@@ -60,16 +63,38 @@ foreach ($posts as $key => $post) {
         // add start of card and carousel
         $result .= '<div class="card mb-5" style="width: 750px;">
                         <div id="carouselControls_' . $idPost . '" class="carousel slide" data-bs-ride="carousel">
-                            <div class="carousel-inner">
-                                <div class="carousel-item active">
-                                    <img src="' . $src . '" width="748">      
-                                </div>';
+                            <div class="carousel-inner">';
+
+        // add image or video in the carousel
+        if (is_numeric(strpos($type, "image"))) {
+
+            $result .= '<div class="carousel-item active">
+                            <img src="' . $src . '" width="748">      
+                        </div>';
+        } else {
+
+            $result .= '<div class="carousel-item active">
+                            <video width="750px" autoplay controls loop>
+                                <source src="' . $src . '" type="' . $type . '">
+                            </video>     
+                        </div> ';
+        }
     } else {
 
-        // add image in the carousel
-        $result .= '<div class="carousel-item">
-                        <img src="' . $src . '" width="748">      
-                    </div>';
+        // add image or video in the carousel
+        if (is_numeric(strpos($type, "image"))) {
+
+            $result .= '<div class="carousel-item">
+                            <img src="' . $src . '" width="748">      
+                        </div>';
+        } else {
+
+            $result .= '<div class="carousel-item">
+                            <video width="750px" autoplay controls loop>
+                                <source src="' . $src . '" type="' . $type . '">
+                            </video>     
+                        </div> ';
+        }
     }
 
 

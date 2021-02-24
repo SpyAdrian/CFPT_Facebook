@@ -2,6 +2,7 @@
 
 require_once('../models/OBJposts.php');
 require_once('../models/OBJmedias.php');
+require_once('../models/OBJdbConn.php');
 
 
 // --- CONST ---
@@ -28,22 +29,21 @@ $error = null;
 $post_size = null;
 
 foreach ($files as $f) {
-
     $post_size += $f['size'];
 
-    if (strpos($f["type"], "image") === false) {
-        $error = "One of your files isn't an image." . $f["type"];
+    if (is_numeric(strpos($f["type"], "image")) == false && is_numeric(strpos($f["type"], "video")) == false && is_numeric(strpos($f["type"], "audio")) == false) {
+        $error = "One of your files isn't an image, video or audio, but is an : " . $f["type"];
         break;
     }
 
     if ($f['size'] >= $MAX_SIZE_FILE) {
-        $error = "One of your images exceeds the size limit of " . $MAX_SIZE_FILE . " bytes.";
+        $error = "One of your files exceeds the size limit of " . $MAX_SIZE_FILE . " bytes.";
         break;
     }
 }
 
 if ($post_size >= $MAX_SIZE_POST) {
-    $error = "Your images exceeds the size limit of " . $MAX_SIZE_POST . " bytes.";
+    $error = "Your files exceeds the size limit of " . $MAX_SIZE_POST . " bytes.";
 }
 
 // return to post with the error

@@ -73,7 +73,7 @@ if (isset($error)) {
         <form action="../controllers/createPost_controller.php" method="POST" enctype="multipart/form-data" class="w-25 mt-5" style="min-width: 275px;">
             <div class="form-group mb-2">
                 <label class="mb-1" for="postFormUpload">Choose your Uploads : </label>
-                <input name="createPostForm_File[]" type="file" class="form-control" id="postFormUpload" accept="image/*" multiple>
+                <input name="createPostForm_File[]" type="file" class="form-control" id="postFormUpload" accept="image/*,audio/*,video/*" multiple>
             </div>
             <div class="form-group mb-2">
                 <label class="mb-1" for="postFormDescription">Description : </label>

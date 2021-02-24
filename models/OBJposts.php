@@ -20,7 +20,7 @@ class Posts
     public static function getPostsWithMediaNameByNewest()
     {
         try {
-            $sql = "SELECT post.idPost, post.commentaire, post.creationDate, post.modificationDate, media.nom FROM post ";
+            $sql = "SELECT post.idPost, post.commentaire, post.creationDate, post.modificationDate, media.nom, media.type FROM post ";
             $sql .= "INNER JOIN media on post.idPost = media.idPost ";
             $sql .= "ORDER BY post.modificationDate DESC, post.idPost ASC";
             $db = DBConnection::prepare($sql);
