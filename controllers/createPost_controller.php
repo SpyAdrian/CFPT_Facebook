@@ -55,21 +55,31 @@ if ($error != null) {
 
 // --- CREATE POST & IMG ---
 
-$postInserted = json_encode(Posts::insertPost($commentaire));
+$db = DBConnection::getConnection();
+$db->BeginTransaction();
 
-if ($postInserted) {
-    $idPost = Posts::getLastInsertId()[0][0];
+try {
+    $postInserted = json_encode(Posts::insertPost($commentaire));
 
-    foreach ($files as $key => $value) {
-        $fileExtention = '.' . explode('/', $value["type"])[1];
-        $filename = uniqid("", true) . $fileExtention;
+    if ($postInserted) {
+        $idPost = Posts::getLastInsertId()[0][0];
 
-        $mediaInserted = Medias::insertMedia($filename, $value["type"], $idPost);
+        foreach ($files as $key => $value) {
+            $fileExtention = '.' . explode('/', $value["type"])[1];
+            $filename = uniqid("", true) . $fileExtention;
 
-        if ($mediaInserted) {
-            move_uploaded_file($value["tmp_name"], $REP_IMG . $filename);
+            $mediaInserted = Medias::insertMedia($filename, $value["type"], $idPost);
+
+            if ($mediaInserted) {
+                move_uploaded_file($value["tmp_name"], $REP_IMG . $filename);
+            }
         }
     }
+
+    $db->commit();
+} catch (PDOException $e) {
+    $db->rollBack();
+    $result = '<pre>Erreur : ' . $e->getMessage() . '</pre>';
 }
 
 
