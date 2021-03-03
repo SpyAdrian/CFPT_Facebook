@@ -4,13 +4,6 @@ require_once('../models/OBJposts.php');
 require_once('../models/OBJmedias.php');
 
 
-// --- CONST ---
-
-$REP_IMG = "../assets/image/";
-$REP_VIDEO = "../assets/video/";
-$REP_AUDIO = "../assets/audio/";
-
-
 // --- GET DATA ---
 
 $result = "";
@@ -27,7 +20,7 @@ if ($posts == array()) die();
 $firstLoop = true;
 $lastId = -1;
 $lastCommentaire;
-$lastModificationData;
+$lastModificationDate;
 
 foreach ($posts as $key => $post) {
 
@@ -45,23 +38,7 @@ foreach ($posts as $key => $post) {
         if ($firstLoop == false) {
 
             // add end of carousel and card
-            $result .= '
-                </div>
-                    <a class="carousel-control-prev" href="#carouselControls_' . $lastId . '" role="button" data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Previous</span>
-                    </a>
-                    <a class="carousel-control-next" href="#carouselControls_' . $lastId . '" role="button" data-bs-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Next</span>
-                    </a>
-                </div>
-                <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text">' . $lastCommentaire . '</p>
-                    <p class="card-text"><small class="text-muted">Last Update ' . $lastModificationData . '</small></p>
-                </div>
-            </div>';
+            $result .= GetEndCarouselCard($lastId, $lastCommentaire, $lastModificationDate);
         }
 
         // add start of card and carousel
@@ -84,8 +61,9 @@ foreach ($posts as $key => $post) {
                         </video>     
                     </div> ';
     } else {
+
         $result .= '<div class="carousel-item d-flex justify-content-center ' . $active . '">
-                        <audio class="w-50" controls>
+                        <audio class="w-50 mt-5" controls>
                             <source src="' . $src . '" type="' . $type . '">
                         </audio>  
                     </div>';
@@ -93,28 +71,54 @@ foreach ($posts as $key => $post) {
 
     $lastId = $idPost;
     $lastCommentaire = $commentaire;
-    $lastModificationData = $modificationDate;
+    $lastModificationDate = $modificationDate;
     $firstLoop = false;
 }
 
 // add last end of carousel and card
-$result .= '
-    </div>
-        <a class="carousel-control-prev" href="#carouselControls_' . $lastId . '" role="button" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-        </a>
-        <a class="carousel-control-next" href="#carouselControls_' . $lastId . '" role="button" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-        </a>
-    </div>
-    <div class="card-body">
-        <h5 class="card-title">Card title</h5>
-        <p class="card-text">' . $lastCommentaire . '</p>
-        <p class="card-text"><small class="text-muted">Last Update ' . $lastModificationData . '</small></p>
-    </div>
-</div>';
-
+$result .= GetEndCarouselCard($lastId, $lastCommentaire, $lastModificationDate);
 
 echo $result;
+
+
+// --- FUNCTION ---
+
+function GetDeleteButton($idPost)
+{
+    $deleteButton = '<a href="../controllers/deletePost_controller.php?idPost=' . $idPost . '">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="red" class="bi bi-x-circle" viewBox="0 0 16 16">
+                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                            <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
+                        </svg>
+                    </a>';
+
+    return $deleteButton;
+}
+
+function GetEndCarouselCard($id, $commentaire, $date)
+{
+    // Control previous
+    $endCarousel = '</div>
+                    <a class="carousel-control-prev" href="#carouselControls_' . $id . '" role="button" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </a>';
+    // Control next
+    $endCarousel .= '<a class="carousel-control-next" href="#carouselControls_' . $id . '" role="button" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </a>
+                </div>';
+    // Body Card
+    $endCarousel .= '<div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                        <p class="card-text">' . $commentaire . '</p>
+                        <div class="d-flex justify-content-between">
+                            <p class="card-text"><small class="text-muted">Last Update ' . $date . '</small></p>
+                            ' . GetDeleteButton($id) . '
+                        </div>
+                    </div>
+                </div>';
+
+    return $endCarousel;
+}
