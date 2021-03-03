@@ -6,7 +6,9 @@ require_once('../models/OBJmedias.php');
 
 // --- CONST ---
 
-$REP_IMG = "../assets/img/";
+$REP_IMG = "../assets/image/";
+$REP_VIDEO = "../assets/video/";
+$REP_AUDIO = "../assets/audio/";
 
 
 // --- GET DATA ---
@@ -30,11 +32,13 @@ $lastModificationData;
 foreach ($posts as $key => $post) {
 
     $idPost = $post['idPost'];
-    $src = $REP_IMG . $post['nom'];
+    $rep = "../assets/" . explode('/', $post["type"])[0] . '/';
+    $src = $rep . $post['nom'];
     $type = $post['type'];
     $commentaire = $post['commentaire'];
     $modificationDate = $post['modificationDate'];
 
+    $active = ($idPost != $lastId) ? "active" : "";
 
     if ($idPost != $lastId) {
 
@@ -64,39 +68,28 @@ foreach ($posts as $key => $post) {
         $result .= '<div class="card mb-5" style="width: 750px;">
                         <div id="carouselControls_' . $idPost . '" class="carousel slide" data-bs-ride="carousel">
                             <div class="carousel-inner">';
-
-        // add image or video in the carousel
-        if (is_numeric(strpos($type, "image"))) {
-
-            $result .= '<div class="carousel-item active">
-                            <img src="' . $src . '" width="748">      
-                        </div>';
-        } else {
-
-            $result .= '<div class="carousel-item active">
-                            <video width="750px" autoplay controls loop>
-                                <source src="' . $src . '" type="' . $type . '">
-                            </video>     
-                        </div> ';
-        }
-    } else {
-
-        // add image or video in the carousel
-        if (is_numeric(strpos($type, "image"))) {
-
-            $result .= '<div class="carousel-item">
-                            <img src="' . $src . '" width="748">      
-                        </div>';
-        } else {
-
-            $result .= '<div class="carousel-item">
-                            <video width="750px" autoplay controls loop>
-                                <source src="' . $src . '" type="' . $type . '">
-                            </video>     
-                        </div> ';
-        }
     }
 
+    // add image or video in the carousel
+    if (is_numeric(strpos($type, "image"))) {
+
+        $result .= '<div class="carousel-item ' . $active . '">
+                        <img src="' . $src . '" width="748">      
+                    </div>';
+    } elseif (is_numeric(strpos($type, "video"))) {
+
+        $result .= '<div class="carousel-item ' . $active . '">
+                        <video width="750px" autoplay controls loop>
+                            <source src="' . $src . '" type="' . $type . '">
+                        </video>     
+                    </div> ';
+    } else {
+        $result .= '<div class="carousel-item d-flex justify-content-center ' . $active . '">
+                        <audio class="w-50" controls>
+                            <source src="' . $src . '" type="' . $type . '">
+                        </audio>  
+                    </div>';
+    }
 
     $lastId = $idPost;
     $lastCommentaire = $commentaire;

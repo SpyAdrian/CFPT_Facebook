@@ -10,8 +10,6 @@ require_once('../models/OBJdbConn.php');
 $MAX_SIZE_FILE = 3000000;
 $MAX_SIZE_POST = 70000000;
 
-$REP_IMG = "../assets/img/";
-
 
 // ---GET DATA ---
 
@@ -65,13 +63,14 @@ try {
         $idPost = Posts::getLastInsertId()[0][0];
 
         foreach ($files as $key => $value) {
-            $fileExtention = '.' . explode('/', $value["type"])[1];
-            $filename = uniqid("", true) . $fileExtention;
+            $fileExtention = pathinfo($value["name"], PATHINFO_EXTENSION);
+            $filename = uniqid("", true) . '.' . $fileExtention;
 
             $mediaInserted = Medias::insertMedia($filename, $value["type"], $idPost);
 
             if ($mediaInserted) {
-                move_uploaded_file($value["tmp_name"], $REP_IMG . $filename);
+                $rep = "../assets/" . explode('/', $value["type"])[0] . '/';
+                move_uploaded_file($value["tmp_name"], $rep . $filename);
             }
         }
     }
@@ -87,7 +86,6 @@ try {
 
 header("location: ../views/home.php");
 exit;
-
 
 
 // ------- Fonct -------
