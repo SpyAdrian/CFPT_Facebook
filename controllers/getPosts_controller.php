@@ -62,10 +62,12 @@ foreach ($posts as $key => $post) {
                     </div> ';
     } else {
 
-        $result .= '<div class="carousel-item d-flex justify-content-center ' . $active . '">
-                        <audio class="w-50 mt-5" controls>
-                            <source src="' . $src . '" type="' . $type . '">
-                        </audio>  
+        $result .= '<div class="carousel-item' . $active . '">
+                        <div class="d-flex justify-content-center">
+                            <audio class="w-50 mt-5" controls>
+                                <source src="' . $src . '" type="' . $type . '">
+                            </audio>  
+                        </div>
                     </div>';
     }
 
