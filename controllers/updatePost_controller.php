@@ -13,11 +13,12 @@ $MAX_SIZE_POST = 70000000;
 
 // ---GET DATA ---
 
-$commentaire = filter_input(INPUT_POST, "createPostForm_Commentaire", FILTER_DEFAULT, FILTER_SANITIZE_STRING);
+$idPost = filter_input(INPUT_POST, "idPost", FILTER_DEFAULT, FILTER_SANITIZE_NUMBER_INT);
+$commentaire = filter_input(INPUT_POST, "updatePostForm_Commentaire", FILTER_DEFAULT, FILTER_SANITIZE_STRING);
 $files = null;
 
-if (isset($_FILES['createPostForm_File'])) {
-    $files = reArrayFiles($_FILES['createPostForm_File']);
+if (isset($_FILES['updatePostForm_File'])) {
+    $files = reArrayFiles($_FILES['updatePostForm_File']);
 
     if ($files[0]['name'] == null)
         $files = array();
@@ -28,6 +29,9 @@ if (isset($_FILES['createPostForm_File'])) {
 
 $error = null;
 $post_size = null;
+
+// file exist
+
 
 foreach ($files as $f) {
     $post_size += $f['size'];
@@ -49,32 +53,29 @@ if ($post_size >= $MAX_SIZE_POST) {
 
 // return to post with the error
 if ($error != null) {
-    header("location: ../views/post.php?error=" . $error);
+    header("location: ../views/updatePost.php?error=" . $error . "&idPost=" . $idPost);
     exit;
 }
 
 
-// --- CREATE POST & IMG ---
+// --- UPDATE POST & IMG ---
 
 $db = DBConnection::getConnection();
 $db->BeginTransaction();
 
 try {
-    $postInserted = json_encode(Posts::insertPost($commentaire));
 
-    if ($postInserted) {
-        $idPost = Posts::getLastInsertId()[0][0];
+    Posts::updatePost($idPost, $commentaire);
 
-        foreach ($files as $key => $value) {
-            $fileExtention = pathinfo($value["name"], PATHINFO_EXTENSION);
-            $filename = uniqid("", true) . '.' . $fileExtention;
+    foreach ($files as $key => $value) {
+        $fileExtention = pathinfo($value["name"], PATHINFO_EXTENSION);
+        $filename = uniqid("", true) . '.' . $fileExtention;
 
-            $mediaInserted = Medias::insertMedia($filename, $value["type"], $idPost);
+        $mediaInserted = Medias::insertMedia($filename, $value["type"], $idPost);
 
-            if ($mediaInserted) {
-                $rep = "../assets/" . explode('/', $value["type"])[0] . '/';
-                move_uploaded_file($value["tmp_name"], $rep . $filename);
-            }
+        if ($mediaInserted) {
+            $rep = "../assets/" . explode('/', $value["type"])[0] . '/';
+            move_uploaded_file($value["tmp_name"], $rep . $filename);
         }
     }
 

@@ -17,6 +17,19 @@ class Posts
         }
     }
 
+    public static function getPostById($idPost)
+    {
+        try {
+            $sql = "SELECT * FROM post WHERE idPost = :idPost";
+            $db = DBConnection::prepare($sql);
+            $db->bindParam('idPost', $idPost, PDO::PARAM_INT);
+            $db->execute();
+            return $db->fetchAll();
+        } catch (PDOException $e) {
+            return '<pre>Erreur : ' . $e->getMessage() . '</pre>';
+        }
+    }
+
     public static function getPostsWithMediaNameByNewest()
     {
         try {

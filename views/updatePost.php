@@ -1,4 +1,5 @@
 <?php
+require_once '../controllers/stickyPost_controller.php';
 
 $error = filter_input(INPUT_GET, "error", FILTER_DEFAULT, FILTER_SANITIZE_STRING);
 $errorAlert;
@@ -64,20 +65,21 @@ if (isset($error)) {
 
     <!-- Banner -->
     <div class="w-100 h-40 bg-primary d-flex flex-column justify-content-center align-items-center">
-        <h1 class="text-center display-1 pb-5">Create Your Own Post !</h1>
+        <h1 class="text-center display-1 pb-5">Updating Your Post !</h1>
         <h1 class="text-center display-6"></h1>
     </div>
 
     <!-- Form -->
     <div class="d-flex flex-column justify-content-center align-items-center">
-        <form action="../controllers/createPost_controller.php" method="POST" enctype="multipart/form-data" class="w-25 mt-5" style="min-width: 275px;">
+        <form action="../controllers/updatePost_controller.php" method="POST" enctype="multipart/form-data" class="w-25 mt-5" style="min-width: 275px;">
+            <input type="hidden" name="idPost" id="idPost" value="<?= $idPost ?>">
             <div class="form-group mb-2">
-                <label class="mb-1" for="createPostForm_File">Choose your Uploads : </label>
-                <input name="createPostForm_File[]" type="file" class="form-control" id="createPostForm_File" accept="image/*,audio/*,video/*" multiple>
+                <label class="mb-1" for="updatePostForm_File">Choose your Uploads : </label>
+                <input name="updatePostForm_File[]" type="file" class="form-control" id="updatePostForm_File" accept="image/*,audio/*,video/*" multiple>
             </div>
             <div class="form-group mb-2">
-                <label class="mb-1" for="createPostForm_Commentaire">Description : </label>
-                <textarea name="createPostForm_Commentaire" class="form-control" id="createPostForm_Commentaire" rows="5"></textarea>
+                <label class="mb-1" for="updatePostForm_Commentaire">Description : </label>
+                <textarea name="updatePostForm_Commentaire" class="form-control" id="updatePostForm_Commentaire" rows="5"><?= $commentaire ?></textarea>
             </div>
             <button name="submit" type="submit" class="btn btn-primary">Submit</button>
         </form>
