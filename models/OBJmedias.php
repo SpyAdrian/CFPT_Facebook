@@ -29,6 +29,18 @@ class Medias
         }
     }
 
+    public static function getMediaByIdMedia($idMedia)
+    {
+        try {
+            $sql = "SELECT * FROM media WHERE idMedia = " . $idMedia;
+            $db = DBConnection::prepare($sql);
+            $db->execute();
+            return $db->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            return '<pre>Erreur : ' . $e->getMessage() . '</pre>';
+        }
+    }
+
     public static function insertMedia($nom, $type, $idPost)
     {
         $creationDate = date("Y-m-d H:i:s");

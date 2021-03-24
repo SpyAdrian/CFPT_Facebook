@@ -23,6 +23,9 @@ if (isset($error)) {
     <!-- Custom style -->
     <link rel="stylesheet" type="text/css" href="../assets/css/styles.css" />
 
+    <!-- Jquery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
     <title>CFPT Facebook</title>
 </head>
 
@@ -69,24 +72,80 @@ if (isset($error)) {
         <h1 class="text-center display-6"></h1>
     </div>
 
-    <!-- Form -->
+    <!-- Modify Post -->
     <div class="d-flex flex-column justify-content-center align-items-center">
+
+        <!-- Form -->
         <form action="../controllers/updatePost_controller.php" method="POST" enctype="multipart/form-data" class="w-25 mt-5" style="min-width: 275px;">
             <input type="hidden" name="idPost" id="idPost" value="<?= $idPost ?>">
             <div class="form-group mb-2">
-                <label class="mb-1" for="updatePostForm_File">Choose your Uploads : </label>
+                <label class="mb-1" for="updatePostForm_File">Add Image : </label>
                 <input name="updatePostForm_File[]" type="file" class="form-control" id="updatePostForm_File" accept="image/*,audio/*,video/*" multiple>
             </div>
             <div class="form-group mb-2">
-                <label class="mb-1" for="updatePostForm_Commentaire">Description : </label>
+                <label class="mb-1" for="updatePostForm_Commentaire">Modify Description : </label>
                 <textarea name="updatePostForm_Commentaire" class="form-control" id="updatePostForm_Commentaire" rows="5"><?= $commentaire ?></textarea>
             </div>
             <button name="submit" type="submit" class="btn btn-primary">Submit</button>
         </form>
+
+        <!-- Image Posts -->
+        <div class="d-flex flex-wrap justify-content-center align-items-center mt-5 mb-5">
+
+            <?php
+            foreach ($medias as $media) {
+
+                $rep = "../assets/" . explode('/', $media["type"])[0] . '/';
+                $src = $rep . $media['nom'];
+
+                echo '<div class="card" id="' . $media["idMedia"] . '">';
+
+                // use the right html for each type
+                if (is_numeric(strpos($media["type"], "image"))) {
+
+                    echo '<img src="' . $src . '" width="400">';
+                } elseif (is_numeric(strpos($media["type"], "video"))) {
+
+                    echo '<video width="750px" autoplay controls loop>
+                            <source src="' . $src . '" type="' . $media["type"] . '">
+                          </video>';
+                } else {
+
+                    echo '<audio width="750px" class="mt-5 px-3" controls>
+                            <source src="' . $src . '" type="' . $media["type"] . '">
+                          </audio>';
+                }
+
+                echo '  <div class="card-body d-flex justify-content-center">
+                          <button type="button" onclick="DeleteImage(' . $media["idMedia"] . ')" class="btn btn-danger">Delete</button>
+                        </div>
+                      </div>';
+            }
+
+            ?>
+        </div>
     </div>
 
 
 
+
+
 </body>
+
+<script>
+    function DeleteImage(idMedia) {
+
+        $.ajax({
+            url: '../controllers/deleteMedia_controller.php',
+            type: 'POST',
+            data: {
+                "idMedia": idMedia,
+            },
+            success: function(res, statut) {
+                document.getElementById(idMedia).remove();
+            }
+        });
+    }
+</script>
 
 </html>

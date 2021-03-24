@@ -30,9 +30,6 @@ if (isset($_FILES['updatePostForm_File'])) {
 $error = null;
 $post_size = null;
 
-// file exist
-
-
 foreach ($files as $f) {
     $post_size += $f['size'];
 

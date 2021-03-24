@@ -9,7 +9,7 @@ require_once('../models/OBJmedias.php');
 $idPost = filter_input(INPUT_GET, "idPost", FILTER_DEFAULT, FILTER_SANITIZE_NUMBER_INT);
 
 $posts = Posts::getPostById($idPost);
-
+$medias = Medias::getMediasByIdPost($idPost);
 
 // ---- CREATE VAR STICKY ----
 
