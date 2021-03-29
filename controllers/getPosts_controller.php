@@ -125,8 +125,7 @@ function GetEndCarouselCard($id, $commentaire, $date)
                 </div>';
     // Body Card
     $endCarousel .= '<div class="card-body">
-                        <h5 class="card-title">Card title</h5>
-                        <p class="card-text">' . $commentaire . '</p>
+                        <h5 class="card-title">' . $commentaire . '</h5>
                         <div class="d-flex justify-content-between">
                             <p class="card-text"><small class="text-muted">Last Update ' . $date . '</small></p>
                             <div class="d-flex">

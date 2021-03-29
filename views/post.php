@@ -22,13 +22,16 @@ if (isset($error)) {
     <!-- Custom style -->
     <link rel="stylesheet" type="text/css" href="../assets/css/styles.css" />
 
+    <!-- Jquery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
     <title>CFPT Facebook</title>
 </head>
 
-<body style="height: 100%;">
+<body style="height: 100%;" id="idBody">
 
     <!-- Nav Bar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light p-4" style="height: 75px;">
+    <nav id="idNav" class="navbar navbar-expand-lg navbar-light bg-light p-4" style="height: 75px;">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">Navbar</a>
 
@@ -79,12 +82,61 @@ if (isset($error)) {
                 <label class="mb-1" for="createPostForm_Commentaire">Description : </label>
                 <textarea name="createPostForm_Commentaire" class="form-control" id="createPostForm_Commentaire" rows="5"></textarea>
             </div>
-            <button name="submit" type="submit" class="btn btn-primary">Submit</button>
+            <button name="submit" type="button" onclick="CreatePost()" class="btn btn-primary">Submit</button>
         </form>
     </div>
 
 
 
 </body>
+
+<script>
+    function CreatePost() {
+
+        let formData = new FormData();
+
+        let files = document.getElementById("createPostForm_File").files;
+        let commentaire = document.getElementById("createPostForm_Commentaire").value;
+
+        for (const file of files) {
+            formData.append('createPostForm_File[]', file);
+        }
+        formData.append('createPostForm_Commentaire', commentaire);
+
+        $.ajax({
+            url: '../controllers/createPostAjax_controller.php',
+            type: 'POST',
+            contentType: false,
+            processData: false,
+            data: formData,
+            success: function(res, statut) {
+
+                console.log(res);
+
+                let errorDiv = document.createElement('div');
+                errorDiv.classList.add('alert');
+                errorDiv.classList.add('fade');
+                errorDiv.classList.add('show');
+                errorDiv.classList.add('mb-0');
+
+                if (res != "SUCCESS") {
+                    let errorMessage = res.split(':')[1];
+
+                    errorDiv.classList.add('alert-danger');
+                    errorDiv.innerHTML = errorMessage;
+
+                    document.getElementById('idNav').after(errorDiv);
+
+                } else {
+
+                    errorDiv.classList.add('alert-success');
+                    errorDiv.innerHTML = "Votre post à bien été créé.";
+
+                    document.getElementById('idNav').after(errorDiv);
+                }
+            }
+        });
+    }
+</script>
 
 </html>

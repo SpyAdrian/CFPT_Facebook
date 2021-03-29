@@ -12,6 +12,9 @@
     <!-- Custom style -->
     <link rel="stylesheet" type="text/css" href="../assets/css/styles.css" />
 
+    <!-- Jquery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
     <title>CFPT Facebook</title>
 </head>
 
